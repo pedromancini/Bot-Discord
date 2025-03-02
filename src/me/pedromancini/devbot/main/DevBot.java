@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.entities.Guild;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +18,13 @@ public class DevBot {
 
     private static final Logger LOGGER = Logger.getLogger(DevBot.class.getName());
     public static JDA jda;
-    public static Map<Long, String> mapGuildName = new HashMap<>();
+    public static Map<Long, Character> prefixMap = new HashMap<>();
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws SQLException, IOException {
         String token = Config.getToken();
+
+        me.pedromancini.devbot.database.Config.createFilesAndTable();
 
         if (token == null || token.isEmpty()) {
             LOGGER.severe("Token não encontrado! Verifique o arquivo config.properties.");
@@ -31,9 +36,12 @@ public class DevBot {
             jda = JDABuilder.create(token, EnumSet.allOf(GatewayIntent.class)).build();
             jda.addEventListener(new Ping());
 
+
+
             // Mapeia os nomes das guildas
-            for (Guild guild : jda.getGuilds()) {
-                mapGuildName.put(guild.getIdLong(), guild.getName());
+            for (Guild guild : jda.awaitReady().getGuilds()) {
+             prefixMap.put(guild.getIdLong(), '!');
+
             }
 
         } catch (Exception e) {
