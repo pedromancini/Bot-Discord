@@ -1,7 +1,9 @@
 package me.pedromancini.devbot.main;
 
+import me.pedromancini.devbot.commands.Music;
 import me.pedromancini.devbot.commands.Ping;
 import me.pedromancini.devbot.commands.Prefix;
+import me.pedromancini.devbot.commands.PresetCommands;
 import me.pedromancini.devbot.database.CRUD;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,10 +37,12 @@ public class DevBot {
 
         try {
             // Inicializa o bot com o token carregado
+            // Carrega as funções...
             jda = JDABuilder.create(token, EnumSet.allOf(GatewayIntent.class)).build();
             jda.addEventListener(new Ping());
             jda.addEventListener(new Prefix());
-
+            jda.addEventListener(new PresetCommands());
+            jda.addEventListener(new Music());
 
 
 
@@ -56,5 +60,11 @@ public class DevBot {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Erro ao inicializar o bot", e);
         }
+
+
+
+
+
+
     }
 }

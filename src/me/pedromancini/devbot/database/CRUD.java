@@ -44,7 +44,7 @@ public class CRUD {
     public static void select(String guildId) throws SQLException {
 
         String sql = """
-                        select * from tb_guild where guild_id = %s
+                        select * from tb_guild where guild_id = '%s'
                      """.formatted(guildId);
         Statement statement = Objects.requireNonNull(ConnectionFactory.getConn()).createStatement();
 
